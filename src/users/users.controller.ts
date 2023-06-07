@@ -10,7 +10,7 @@ import {
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 
-@Controller('users')
+@Controller('api/v1/users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 

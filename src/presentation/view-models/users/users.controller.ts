@@ -21,7 +21,6 @@ export class UsersController {
 
   @Get(':id')
   async findOne(@Param('id') id): Promise<User> {
-    this.validate(id);
     return await this.userService.findOne(id);
   }
 
@@ -32,22 +31,12 @@ export class UsersController {
 
   @Delete(':id')
   async delete(@Param('id') id): Promise<void> {
-    this.validate(id);
     return await this.userService.delete(id);
   }
 
   @Put(':id')
   async update(@Param('id') id, @Body() user: User): Promise<any> {
-    this.valideateUser(user);
     user.id = Number(id);
     return await this.userService.update(id, user);
-  }
-
-  validate(id: number): void {
-    if (!id) throw new Error('ID IS REQUIRED');
-  }
-
-  valideateUser(user: User): void {
-    if (!user) throw new Error('USER IS REQUIRED');
   }
 }

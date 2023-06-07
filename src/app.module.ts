@@ -16,7 +16,7 @@ import { Module } from '@nestjs/common';
       username: 'postgres',
       password: 'postgres',
       database: 'postgres',
-      entities: [__dirname + '/**/*.entity(.ts,.js)'],
+      entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
   ],

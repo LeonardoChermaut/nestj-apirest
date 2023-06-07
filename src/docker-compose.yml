@@ -1,0 +1,25 @@
+version: "4.2"
+services:
+  redis:
+    hostname: redis
+    image: redis:7.0.0-alpine
+    tty: true
+    stdin_open: true
+    restart: 'no'
+    ports:
+      - 6379:6379
+  db:
+    hostname: db
+    tty: true
+    stdin_open: true
+    image: "postgres:10"
+    restart: "no"
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_HOST: "db"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "postgres"
+    volumes:
+      - "/var/lib/docker/volumes/postgres/_data"

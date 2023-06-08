@@ -7,7 +7,7 @@ import {
   Body,
   Param,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UsersService } from './user.service';
 import { User } from './user.entity';
 
 @Controller('api/v1/users')
@@ -20,8 +20,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id): Promise<User> {
-    return await this.userService.findOne(id);
+  async findById(@Param('id') id: number): Promise<User> {
+    return await this.userService.findById(id);
   }
 
   @Post()

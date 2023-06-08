@@ -30,8 +30,10 @@ export class PostsController {
   }
 
   @Put(':id')
-  async update(@Param('id') id, @Body() post: PostEntity): Promise<PostEntity> {
-    post.id = Number(id);
+  async update(
+    @Param('id') id: number,
+    @Body() post: PostEntity,
+  ): Promise<PostEntity> {
     return await this.service.update(id, post);
   }
 

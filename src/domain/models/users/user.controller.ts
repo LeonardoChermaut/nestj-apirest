@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { User } from './user.entity';
+import { ExceptionHandler } from 'src/infra/exception';
 
 @Controller('api/v1/users')
 export class UsersController {
@@ -16,27 +17,46 @@ export class UsersController {
 
   @Get()
   async findAll(): Promise<User[]> {
-    return await this.userService.findAll();
+    try {
+      return await this.userService.findAll();
+    } catch (error) {
+      throw new ExceptionHandler(error.message, 404);
+    }
   }
 
   @Get(':id')
   async findById(@Param('id') id: number): Promise<User> {
-    return await this.userService.findById(id);
+    try {
+      return await this.userService.findById(id);
+    } catch (error) {
+      throw new ExceptionHandler(error.message, 404);
+    }
   }
 
   @Post()
   async create(@Body() user: User): Promise<User> {
-    return await this.userService.create(user);
+    try {
+      return await this.userService.create(user);
+    } catch (error) {
+      throw new ExceptionHandler(error.message, 400);
+    }
   }
 
   @Delete(':id')
   async delete(@Param('id') id): Promise<void> {
-    return await this.userService.delete(id);
+    try {
+      return await this.userService.delete(id);
+    } catch (error) {
+      throw new ExceptionHandler(error.message, 404);
+    }
   }
 
   @Put(':id')
-  async update(@Param('id') id, @Body() user: User): Promise<any> {
-    user.id = Number(id);
-    return await this.userService.update(id, user);
+  async update(@Param('id') id: number, @Body() user: User): Promise<any> {
+    try {
+      return await this.userService.update(id, user);
+    } catch (error) {
+      throw new ExceptionHandler(error.message, 400);
+    }
   }
 }

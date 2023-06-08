@@ -7,12 +7,12 @@ import {
   Put,
   Body,
 } from '@nestjs/common/decorators';
-import { PostService } from './post.service';
+import { PostsService } from './post.service';
 import { Post as PostEntity } from './post.entity';
 
 @Controller('api/v1/posts')
-export class PostController {
-  constructor(private readonly service: PostService) {}
+export class PostsController {
+  constructor(private readonly service: PostsService) {}
 
   @Get()
   async findAll(): Promise<PostEntity[]> {

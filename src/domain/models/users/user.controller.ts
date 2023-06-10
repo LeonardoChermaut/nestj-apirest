@@ -6,6 +6,8 @@ import {
   Delete,
   Body,
   Param,
+  HttpStatus,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { User } from './user.entity';
@@ -16,29 +18,32 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Get()
-  async findAll(): Promise<User[]> {
+  async findAll(@Res() response): Promise<User[]> {
     try {
-      return await this.userService.findAll();
+      const users = await this.userService.findAll();
+      return response.status(HttpStatus.OK).json(users);
     } catch (error) {
-      throw new ExceptionHandler(error.message, 404);
+      throw new ExceptionHandler(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
   @Get(':id')
-  async findById(@Param('id') id: number): Promise<User> {
+  async findById(@Param('id') id: number, @Res() response: any): Promise<User> {
     try {
-      return await this.userService.findById(id);
+      const user = await this.userService.findById(id);
+      return response.status(HttpStatus.OK).json(user);
     } catch (error) {
-      throw new ExceptionHandler(error.message, 404);
+      throw new ExceptionHandler(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
   @Post()
-  async create(@Body() user: User): Promise<User> {
+  async create(@Body() user: User, @Res() response: any): Promise<User> {
     try {
-      return await this.userService.create(user);
+      const newUser = await this.userService.create(user);
+      return response.status(HttpStatus.CREATED).json(newUser);
     } catch (error) {
-      throw new ExceptionHandler(error.message, 400);
+      throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -47,7 +52,7 @@ export class UsersController {
     try {
       return await this.userService.delete(id);
     } catch (error) {
-      throw new ExceptionHandler(error.message, 404);
+      throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -56,7 +61,7 @@ export class UsersController {
     try {
       return await this.userService.update(id, user);
     } catch (error) {
-      throw new ExceptionHandler(error.message, 400);
+      throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }

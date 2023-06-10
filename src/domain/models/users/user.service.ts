@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { RequiredFieldError } from 'src/infra/error';
+import { ExceptionHandler } from 'src/infra/exception';
 
 @Injectable()
 export class UsersService {
@@ -11,34 +12,53 @@ export class UsersService {
   ) {}
 
   async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
+    try {
+      return await this.usersRepository.find();
+    } catch (error) {
+      throw new ExceptionHandler(error.message, HttpStatus.NOT_FOUND);
+    }
   }
 
   async findById(id: number): Promise<User> {
-    return await this.usersRepository.findOne({ where: { id } });
+    try {
+      const user = await this.usersRepository.findOne({ where: { id } });
+      return user;
+    } catch (error) {
+      throw new ExceptionHandler(error.message, HttpStatus.NOT_FOUND);
+    }
   }
 
   async create(user: User): Promise<User> {
-    this.isValidUser(user);
-    const newUser = this.usersRepository.create(user);
-    return await this.usersRepository.save(newUser);
+    try {
+      this.isValidUser(user);
+      const newUser = this.usersRepository.create(user);
+      return await this.usersRepository.save(newUser);
+    } catch (error) {
+      throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async update(id: number, user: User): Promise<User> {
-    await this.usersRepository.update(id, user);
-    return await this.usersRepository.findOne({ where: { id } });
+    try {
+      await this.usersRepository.update(id, user);
+      return await this.usersRepository.findOne({ where: { id } });
+    } catch (error) {
+      throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async delete(id: number): Promise<void> {
-    await this.usersRepository.delete(id);
+    try {
+      await this.usersRepository.delete(id);
+    } catch (error) {
+      throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   private isValidUser(user: User): boolean {
-    const { name, email, password, role } = user;
-    if (!name) throw new RequiredFieldError('Name is required');
-    if (!email) throw new RequiredFieldError('Email is required');
-    if (!password) throw new RequiredFieldError('Password is required');
-    if (!role) throw new RequiredFieldError('Role is required');
+    for (const field in user) {
+      if (!user[field]) throw new RequiredFieldError(field);
+    }
     return true;
   }
 }

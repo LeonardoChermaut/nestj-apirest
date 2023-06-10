@@ -2,15 +2,19 @@ import {
   Controller,
   Get,
   Post,
-  Put,
+  Patch,
   Delete,
   Body,
   Param,
   HttpStatus,
   Res,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { User } from './user.entity';
+import { CreateUserDTO } from 'src/domain/dto/user/create.user.dto';
+import { UpdateUserDTO } from 'src/domain/dto/user/update.user.dto';
 
 @Controller('api/v1/users')
 export class UsersController {
@@ -29,14 +33,21 @@ export class UsersController {
   }
 
   @Post()
-  async create(@Body() user: User, @Res() response: any): Promise<User> {
+  async create(
+    @Body() user: CreateUserDTO,
+    @Res() response: any,
+  ): Promise<User> {
     const newUser = await this.userService.create(user);
     return response.status(HttpStatus.CREATED).json(newUser);
   }
 
-  @Put(':id')
-  async update(@Param('id') id: number, @Body() user: User): Promise<any> {
-    return await this.userService.update(id, user);
+  @Patch(':id')
+  @UsePipes(ValidationPipe)
+  async update(
+    @Param('id') id: number,
+    @Body() updateUserDto: UpdateUserDTO,
+  ): Promise<any> {
+    return await this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')

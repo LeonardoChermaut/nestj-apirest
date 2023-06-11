@@ -1,31 +1,24 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Post } from '../posts/post.entity';
-import { IsNotEmpty, IsEmail, MinLength, MaxLength } from 'class-validator';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn({ type: 'integer' })
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 80 })
-  @IsNotEmpty({ message: 'O nome é obrigatório' })
+  @Column()
   protected name: string;
 
-  @Column({ length: 100, unique: true })
-  @IsNotEmpty({ message: 'O e-mail é obrigatório' })
-  @IsEmail({}, { message: 'Informe um e-mail válido' })
+  @Column()
   protected email: string;
 
-  @Column({ length: 20 })
-  @IsNotEmpty({ message: 'A senha é obrigatória' })
-  @MinLength(6, { message: 'A senha deve ter no mínimo 6 caracteres' })
-  @MaxLength(20, { message: 'A senha deve ter no máximo 20 caracteres' })
+  @Column()
   protected password: string;
 
-  @Column({ default: true })
+  @Column()
   protected isActive: boolean;
 
-  @Column({ enum: ['ADMIN', 'USER'], default: 'USER' })
+  @Column()
   protected role: string;
 
   @OneToMany(() => Post, (post) => post.user)

@@ -4,15 +4,24 @@ import { User } from 'src/domain/models/users';
 
 export class UpdateUserDTO extends PartialType(User) {
   @IsString()
-  protected readonly name: string;
-  @IsEmail()
-  protected readonly email: string;
+  @ApiProperty({ minLength: 6, maxLength: 80 })
+  protected readonly name?: string;
+
+  @IsEmail({ allow_display_name: true })
+  @ApiProperty({ uniqueItems: true })
+  protected readonly email?: string;
+
   @IsString()
-  protected readonly password: string;
+  @ApiProperty({ minLength: 6, maxLength: 20 })
+  protected readonly password?: string;
+
   @ApiProperty({ default: true })
-  protected readonly isActive: boolean;
+  protected readonly isActive?: boolean;
+
   @IsString()
-  protected readonly role: string;
+  @ApiProperty({ enum: ['admin', 'user'], default: 'user' })
+  protected readonly role?: string;
+
   @ApiProperty({ default: [] })
-  readonly posts: any[];
+  readonly posts?: any[];
 }

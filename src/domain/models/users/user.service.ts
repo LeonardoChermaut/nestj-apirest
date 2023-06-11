@@ -2,7 +2,6 @@ import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { RequiredFieldError } from 'src/infra/error';
 import { ExceptionHandler } from 'src/infra/exception';
 import { UpdateUserDTO } from 'src/domain/dto/user/update.user.dto';
 import { CreateUserDTO } from 'src/domain/dto/user/create.user.dto';
@@ -31,7 +30,6 @@ export class UsersService {
 
   async create(user: CreateUserDTO): Promise<void> {
     try {
-      this.isValidUser(user);
       const newUser = this.usersRepository.create(user);
       await this.usersRepository.save(newUser);
     } catch (error) {
@@ -41,7 +39,6 @@ export class UsersService {
 
   async update(id: number, user: UpdateUserDTO): Promise<void> {
     try {
-      this.isValidUser(user);
       await this.usersRepository.update(id, user);
     } catch (error) {
       throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
@@ -54,12 +51,5 @@ export class UsersService {
     } catch (error) {
       throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
     }
-  }
-
-  private isValidUser(user: CreateUserDTO | UpdateUserDTO): boolean {
-    for (const index in user) {
-      if (!user[index]) throw new RequiredFieldError(index);
-    }
-    return true;
   }
 }

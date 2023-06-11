@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { UseGlobalHttpFilter } from './http.execption.filter';
+import { UseGlobalValidationPipe } from './use.global.pipe';
 
 @Module({
   providers: [
     {
       provide: APP_FILTER,
-      useClass: UseGlobalHttpFilter,
+      useClass: UseGlobalValidationPipe,
     },
   ],
 })
-export class HttpExceptionModule {}
+export class GlobalValidationPipeModule {}

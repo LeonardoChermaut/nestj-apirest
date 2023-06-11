@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { RequiredFieldError } from 'src/infra/error';
 import { ExceptionHandler } from 'src/infra/exception';
+import { UpdateUserDTO } from 'src/domain/dto/user/update.user.dto';
+import { CreateUserDTO } from 'src/domain/dto/user/create.user.dto';
 
 @Injectable()
 export class UsersService {
@@ -21,27 +23,26 @@ export class UsersService {
 
   async findById(id: number): Promise<User> {
     try {
-      const user = await this.usersRepository.findOne({ where: { id } });
-      return user;
+      return await this.usersRepository.findOne({ where: { id } });
     } catch (error) {
       throw new ExceptionHandler(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
-  async create(user: User): Promise<User> {
+  async create(user: CreateUserDTO): Promise<void> {
     try {
       this.isValidUser(user);
       const newUser = this.usersRepository.create(user);
-      return await this.usersRepository.save(newUser);
+      await this.usersRepository.save(newUser);
     } catch (error) {
       throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  async update(id: number, user: User): Promise<User> {
+  async update(id: number, user: UpdateUserDTO): Promise<void> {
     try {
+      this.isValidUser(user);
       await this.usersRepository.update(id, user);
-      return await this.usersRepository.findOne({ where: { id } });
     } catch (error) {
       throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -55,9 +56,9 @@ export class UsersService {
     }
   }
 
-  private isValidUser(user: User): boolean {
-    for (const field in user) {
-      if (!user[field]) throw new RequiredFieldError(field);
+  private isValidUser(user: CreateUserDTO | UpdateUserDTO): boolean {
+    for (const index in user) {
+      if (!user[index]) throw new RequiredFieldError(index);
     }
     return true;
   }

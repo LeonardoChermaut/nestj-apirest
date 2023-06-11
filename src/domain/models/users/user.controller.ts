@@ -8,8 +8,6 @@ import {
   Param,
   HttpStatus,
   Res,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { User } from './user.entity';
@@ -17,7 +15,6 @@ import { CreateUserDTO } from 'src/domain/dto/user/create.user.dto';
 import { UpdateUserDTO } from 'src/domain/dto/user/update.user.dto';
 
 @Controller('api/v1/users')
-@UsePipes(ValidationPipe)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 

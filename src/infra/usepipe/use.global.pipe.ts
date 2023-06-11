@@ -1,5 +1,6 @@
-import { ValidationPipe, BadRequestException } from '@nestjs/common';
+import { ValidationPipe, HttpStatus } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
+import { ExceptionHandler } from '../exception';
 
 export class UseGlobalValidationPipe extends ValidationPipe {
   constructor() {
@@ -14,7 +15,7 @@ export class UseGlobalValidationPipe extends ValidationPipe {
         const message = messages
           .reduce((acc, curr) => acc.concat(curr))
           .join(' ');
-        return new BadRequestException(message);
+        return new ExceptionHandler(message, HttpStatus.BAD_REQUEST);
       },
     });
   }

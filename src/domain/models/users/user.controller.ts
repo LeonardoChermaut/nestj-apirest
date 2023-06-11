@@ -17,6 +17,7 @@ import { CreateUserDTO } from 'src/domain/dto/user/create.user.dto';
 import { UpdateUserDTO } from 'src/domain/dto/user/update.user.dto';
 
 @Controller('api/v1/users')
+@UsePipes(ValidationPipe)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
@@ -42,7 +43,6 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @UsePipes(ValidationPipe)
   async update(
     @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDTO,

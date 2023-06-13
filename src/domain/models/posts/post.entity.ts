@@ -13,15 +13,15 @@ export class Post {
   id: number;
 
   @Column({ length: 20, nullable: false })
-  protected title: string;
+  title: string;
 
   @Column({ length: 255, nullable: false })
-  protected content: string;
+  content: string;
 
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'userId' })
   user: User;
 
   @Column({ nullable: false })
-  protected authorId: number;
+  authorId: number;
 }

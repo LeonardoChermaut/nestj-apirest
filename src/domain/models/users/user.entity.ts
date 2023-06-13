@@ -3,24 +3,24 @@ import { Post } from '../posts/post.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'integer' })
   id: number;
 
   @Column()
-  protected name: string;
+  name: string;
+
+  @Column({ unique: true })
+  email: string;
 
   @Column()
-  protected email: string;
+  password: string;
 
-  @Column()
-  protected password: string;
+  @Column({ default: true })
+  isActive: boolean;
 
-  @Column()
-  protected isActive: boolean;
-
-  @Column()
-  protected role: string;
+  @Column({ enum: ['admin', 'user'], default: 'user' })
+  role: string;
 
   @OneToMany(() => Post, (post) => post.user)
-  readonly posts: Post[];
+  posts: Post[];
 }

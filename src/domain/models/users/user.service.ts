@@ -3,8 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { ExceptionHandler } from 'src/infra/exception';
-import { UpdateUserDTO } from 'src/domain/dto/user/update.user.dto';
-import { CreateUserDTO } from 'src/domain/dto/user/create.user.dto';
+import { UpdateUserDTO, CreateUserDTO, UserDTO } from 'src/domain/dto/user';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +11,7 @@ export class UsersService {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserDTO[]> {
     try {
       return await this.usersRepository.find();
     } catch (error) {
@@ -20,7 +19,7 @@ export class UsersService {
     }
   }
 
-  async findById(id: number): Promise<User> {
+  async findById(id: number): Promise<UserDTO> {
     try {
       return await this.usersRepository.findOne({ where: { id } });
     } catch (error) {

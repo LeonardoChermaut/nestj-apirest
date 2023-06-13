@@ -9,32 +9,34 @@ import {
 } from '@nestjs/common/decorators';
 import { PostsService } from './post.service';
 import { Post as PostEntity } from './post.entity';
+import { PostDTO } from 'src/domain/dto/posts/post.dto';
+import { CreatePostDTO } from 'src/domain/dto/posts/create.post.dto';
 
 @Controller('api/v1/posts')
 export class PostsController {
   constructor(private readonly service: PostsService) {}
 
   @Get()
-  async findAll(): Promise<PostEntity[]> {
+  async findAll(): Promise<PostDTO[]> {
     return await this.service.findAll();
   }
 
   @Get(':id')
-  async findById(@Param('id') id: number): Promise<PostEntity> {
+  async findById(@Param('id') id: number): Promise<PostDTO> {
     return await this.service.findById(id);
   }
 
   @Post()
-  async save(@Body() post: PostEntity): Promise<PostEntity> {
-    return await this.service.save(post);
+  async save(@Body() post: CreatePostDTO): Promise<void> {
+    await this.service.save(post);
   }
 
   @Put(':id')
   async update(
     @Param('id') id: number,
     @Body() post: PostEntity,
-  ): Promise<PostEntity> {
-    return await this.service.update(id, post);
+  ): Promise<void> {
+    await this.service.update(id, post);
   }
 
   @Delete(':id')

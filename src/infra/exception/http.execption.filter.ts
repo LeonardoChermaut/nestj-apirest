@@ -14,7 +14,7 @@ export class UseGlobalHttpFilter implements ExceptionFilter {
     const request = context.getRequest<Request>();
     const status = exception.getStatus();
     const message = exception.message;
-
+    
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './post.entity';
-import { PostDTO, UpdatePostDTO } from 'src/domain/dto/posts';
+import { CreatePostDTO, PostDTO, UpdatePostDTO } from 'src/domain/dto/posts';
 
 @Injectable()
 export class PostsService {
@@ -18,7 +18,7 @@ export class PostsService {
     return await this.repository.findOne({ where: { id } });
   }
 
-  async save(post: Post): Promise<void> {
+  async save(post: CreatePostDTO): Promise<void> {
     await this.repository.save(post);
   }
 

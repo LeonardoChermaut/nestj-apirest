@@ -1,7 +1,3 @@
-import { Post } from 'src/domain/models/posts';
+import { CreatePostDTO } from './create.post.dto';
 
-export class PostDTO extends Post {
-  readonly title: string;
-  readonly content: string;
-  readonly authorId: number;
-}
+export class PostDTO extends CreatePostDTO {}

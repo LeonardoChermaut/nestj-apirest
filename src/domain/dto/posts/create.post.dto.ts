@@ -1,20 +1,29 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { Post } from 'src/domain/models/posts';
 
-export class CreatePostDTO extends Post {
+export class CreatePostDTO {
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ minLength: 6, maxLength: 20 })
-  readonly title: string;
+  @ApiProperty({
+    type: 'varchar',
+    minLength: 6,
+    maxLength: 80,
+    nullable: false,
+  })
+  title: string;
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ minLength: 50, maxLength: 255 })
-  readonly content: string;
+  @ApiProperty({
+    type: 'string',
+    minLength: 50,
+    maxLength: 255,
+    nullable: false,
+  })
+  content: string;
 
   @IsNotEmpty()
   @IsNumber()
-  @ApiProperty()
-  readonly authorId: number;
+  @ApiProperty({ type: 'integer', nullable: false })
+  authorId: number;
 }

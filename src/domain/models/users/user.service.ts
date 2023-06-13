@@ -21,7 +21,7 @@ export class UsersService {
 
   async findById(id: number): Promise<UserDTO> {
     try {
-      return await this.usersRepository.findOne({ where: { id } });
+      return this.checkUserId(id);
     } catch (error) {
       throw new ExceptionHandler(error.message, HttpStatus.NOT_FOUND);
     }
@@ -32,7 +32,7 @@ export class UsersService {
       const newUser = this.usersRepository.create(user);
       await this.usersRepository.save(newUser);
     } catch (error) {
-      throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
+      throw new ExceptionHandler(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -50,5 +50,13 @@ export class UsersService {
     } catch (error) {
       throw new ExceptionHandler(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  private async checkUserId(id: any): Promise<UserDTO> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (user === null || isNaN(id)) {
+      throw new ExceptionHandler('User not found', HttpStatus.NOT_FOUND);
+    }
+    return user;
   }
 }

@@ -8,9 +8,9 @@ import {
   Body,
 } from '@nestjs/common/decorators';
 import { PostsService } from './post.service';
-import { Post as PostEntity } from './post.entity';
 import { PostDTO } from 'src/domain/dto/posts/post.dto';
 import { CreatePostDTO } from 'src/domain/dto/posts/create.post.dto';
+import { UpdatePostDTO } from 'src/domain/dto/posts';
 
 @Controller('api/v1/posts')
 export class PostsController {
@@ -34,7 +34,7 @@ export class PostsController {
   @Put(':id')
   async update(
     @Param('id') id: number,
-    @Body() post: PostEntity,
+    @Body() post: UpdatePostDTO,
   ): Promise<void> {
     await this.service.update(id, post);
   }

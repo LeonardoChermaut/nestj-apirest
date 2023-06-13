@@ -9,7 +9,8 @@ import { User } from '../users/user.entity';
 
 @Entity()
 export class Post {
-  @PrimaryGeneratedColumn({ type: 'integer' })
+  @Column({ type: 'int', unique: true })
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ length: 20, nullable: false })

@@ -3,22 +3,23 @@ import { Post } from '../posts/post.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn({ type: 'integer' })
+  @Column({ type: 'int', unique: true })
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 80 })
   name: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', length: 80, unique: true })
   email: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 20 })
   password: string;
 
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ enum: ['admin', 'user'], default: 'user' })
+  @Column({ type: 'enum', enum: ['admin', 'user'], default: 'user' })
   role: string;
 
   @OneToMany(() => Post, (post) => post.user)
